@@ -11,7 +11,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        // Busca todos os produtos do banco
+        $products = \App\Models\Product::all(); 
+        
+        // Retorna a view com a variável
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -19,7 +23,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -27,7 +31,16 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validação básica
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
+        // Salva no banco
+        \App\Models\Product::create($request->all());
+
+        return redirect()->route('products.index')->with('success', 'Produto criado!');
     }
 
     /**
